@@ -1,9 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const connectDB = require("./config/dbConn");
 const articleRouter = require("./routes/articles");
 const app = express();
 
-mongoose.connect("mongodb://anujbhai:adminadmin@localhost:27017/blog");
+// Connect to MongoDB
+connectDB();
 
 app.set("view engine", "ejs");
 
@@ -24,4 +27,7 @@ app.get("/", (req, res) => {
   res.render("articles/index", {articles: articles});
 });
 
-app.listen(5000);
+mongoose.connection.once("open", () => {
+  console.log("MongoDB database connection established");
+  app.listen(5000, () => console.log("Server started on 5000"));
+});
