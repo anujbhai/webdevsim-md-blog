@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const Article = require("./models/article");
 const connectDB = require("./config/dbConn");
 const articleRouter = require("./routes/articles");
 const app = express();
@@ -11,21 +12,14 @@ connectDB();
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({extended: false}));
-app.use("/articles/", articleRouter);
 
-app.get("/", (req, res) => {
-  const articles = [{
-    title: "Test article",
-    createdAt: new Date(),
-    description: "Test description",
-  }, {
-    title: "Test article 2",
-    createdAt: new Date(),
-    description: "Test description 2",
-  }];
+app.get("/", async (req, res) => {
+  const articles = await Article.find().sort({createdAt: "desc"});
 
   res.render("articles/index", {articles: articles});
 });
+
+app.use("/articles", articleRouter);
 
 mongoose.connection.once("open", () => {
   console.log("MongoDB database connection established");
