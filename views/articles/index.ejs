@@ -28,6 +28,11 @@
           </div>
 
           <a href="articles/<%= item.slug %>" class="btn btn-dark btn-sm">Read More</a>
+          <a href="articles/edit/<%= item.id %>" class="btn btn-secondary btn-sm">Edit</a>
+          
+          <form action="/articles/<%= item.id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-secondary btn-sm">Delete</button>
+          </form>
         </div>
       </div>
     <% }) %>
